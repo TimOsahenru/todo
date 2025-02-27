@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse
 from app.forms import TodoForm
+from app.models import Todo
 
 
 def create_todo(request):
@@ -18,4 +19,5 @@ def create_todo(request):
 
 
 def all_todos(request):
-    return HttpResponse()
+    todos = Todo.objects.all()
+    return render(request, 'all_todos.html', {'todos': todos})

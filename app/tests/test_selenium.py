@@ -33,3 +33,21 @@ def test_create_todo_page(browser):
 
     redirect_url = 'http://localhost:8000/'
     assert browser.current_url == redirect_url, f"Expected to be redirected to {redirect_url} but got {browser.current_url}"
+
+
+
+@pytest.mark.django_db
+def test_new_users_can_see_all_todos(browser):
+    browser.get('http://localhost:8000/')
+    todo_link = browser.find_element(By.TAG_NAME, 'a')
+
+    todo_list_page_header = browser.find_element(By.TAG_NAME, 'h2')
+    header_title = todo_list_page_header.get_attribute('textContent')
+    assert header_title == 'all todos', f"Expected header to be 'all todos' but got {header_title}"
+
+    all_todos = browser.find_elements(By.TAG_NAME, 'a')
+    assert len(all_todos) > 1
+
+    for todo in all_todos:
+        todo_title = todo.get_attribute('textContent')
+        assert todo_title, f"Expected todo title to be non-empty, but got '{todo_title}'"
